@@ -3,11 +3,12 @@ import java.util.Scanner;
 public class Main {
 	
 	public static void main(String[] args) {
-
-        Index index = new Index();
         
         // Create scanner
         Scanner scanner = new Scanner(System.in);
+
+        //make query object
+        Query query = new Query();
         
         //start input loop
         while (true) {
@@ -20,9 +21,13 @@ public class Main {
             break;
         }
 
+
         switch (functionArray[0]) {
             case "create":
-                index.CREATE();
+                query.create();
+                break;
+            case "select":
+                query.selectHash("1403");
                 break;
             default:
                 System.out.println("Unknown command: " + functionInput);
