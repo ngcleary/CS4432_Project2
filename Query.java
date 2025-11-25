@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Query{
 
@@ -37,7 +38,9 @@ public class Query{
             for (File file : files) {
                 //get file number
                 String fileNumber = file.getName().substring(1,3);
-                //System.out.println("fileNumber: " + fileNumber);
+                if (fileNumber.contains(".")){
+                    fileNumber = fileNumber.substring(0,1);
+                }
 
                 //start reading the file - read entire file at a time
                 try (FileReader fr = new FileReader(file)) {
@@ -51,7 +54,7 @@ public class Query{
                     }
 
                     //add record to the hashtable
-                    index.addToHash(fileNumber, fileContent);
+                    index.addToIndex(fileNumber, fileContent);
                     
                 } catch (IOException e) {
                     System.out.print(e.getMessage());
@@ -60,6 +63,12 @@ public class Query{
             }
              System.out.println("hashtable: " + index.getHash().size());
         }
+    }
+
+    //take in string of locations (one or more seperated by | ) and read val from disk
+    public void readFromDisk(String location){
+        String[] locationArray = location.split("|");
+        System.out.print("location: " + locationArray); 
     }
 
     //read the file from the disk and add each record to hash and array
@@ -74,15 +83,40 @@ public class Query{
             readDirectory(index);
 
             System.out.println("The hash-based and array-based indexes are built successfully. Program is ready and waiting for user command.");
+            //System.out.println("hashtable: " + index.getHash().toString());
+            // for (int i = 0; i < index.getArray().length; i++){
+            //     System.out.print(i + ": " + index.getArray()[i]);
+            // }
         }
     }
 
     //If index exists, search hash for values
     public void selectHash(String v){
         if (hasIndex == true){
-            System.out.println("testing select: " + index.getHash().toString());
             System.out.println("Records: " + index.getHash().get(v));
         }
+    }
+
+    public void selectArray(String value1, String value2){
+        //convert to int and adjust for 0-4999 array structure
+        int v1 = Integer.parseInt(value1) - 1;
+        int v2 = Integer.parseInt(value2) - 1;
+
+        //create an array for the projection
+        ArrayList<String> output = new ArrayList<String>();
+        for (int i = v1 + 1; i < v2; i++){
+            if(!index.getArray()[i].equals("0")){
+                output.add(index.getArray()[i]);
+            }
+        }
+       // System.out.println("Records greater than " + value1 + " and less than " + value2 + ": " + output);
+       
+
+        for (String element : output) {
+            System.out.println(element);
+            //readFromDisk(elemet)
+        }
+
     }
 
 }

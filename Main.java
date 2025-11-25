@@ -9,6 +9,7 @@ public class Main {
 
         //make query object
         Query query = new Query();
+        //query.readFromDisk(index);
         
         //start input loop
         while (true) {
@@ -27,7 +28,14 @@ public class Main {
                 query.create();
                 break;
             case "select":
-                query.selectHash("1403");
+                //check if range search
+                if (functionInput.contains(" and ")){
+                    query.selectArray(functionArray[7], functionArray[11]);
+                }
+                //equality search
+                else{
+                    query.selectHash(functionArray[7]); //v
+                }
                 break;
             default:
                 System.out.println("Unknown command: " + functionInput);
