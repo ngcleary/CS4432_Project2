@@ -42,7 +42,6 @@ public class Index {
             String loc = fileNumber.concat("-").concat(String.valueOf(offset));
 
             //check if the key is already in the hashtable - concat if true
-            //if randv in hastable then in array too?
             if (hashIndex.containsKey(randV) == true){
                 loc = hashIndex.get(randV) + " | " + loc;
                 //System.out.println("loc from hash: " + loc);
@@ -50,12 +49,6 @@ public class Index {
             //add to the hashTable
             hashIndex.put(randV, loc);
 
-            //check if randv already assigned a location (value is not 0) - concat if true
-            // if (!arrayIndex[index].equals("0")){
-            //     loc = arrayIndex[index] + " | " + loc;
-            //     System.out.println("loc from array: " + loc);
-
-            // }
             //add to array
             int index = Integer.parseInt(randV) - 1;
             arrayIndex[index] = loc;
