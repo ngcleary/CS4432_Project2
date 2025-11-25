@@ -9,11 +9,11 @@ public class Main {
 
         //make query object
         Query query = new Query();
-        //query.readFromDisk(index);
+        //query.readFromDisk("17 | 40");
         
         //start input loop
         while (true) {
-        System.out.print("The program is ready for the next command: ");
+        System.out.print("\n\nThe program is ready for the next command: ");
         String functionInput = scanner.nextLine().trim().toLowerCase();
         String[] functionArray = functionInput.split(" ");
 
