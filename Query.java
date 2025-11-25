@@ -12,11 +12,13 @@ public class Query{
     private Index index;
     private int lowerBound;
     private int upperBound;
+    private int notEquals;
 
     public Query(){
         hasIndex = false;
         lowerBound = -1;
         upperBound = -1;
+        notEquals = -1;
     }
 
     //getters and setters
@@ -45,6 +47,13 @@ public class Query{
     public void setUpper(int newUpper){
         upperBound = newUpper;
     }
+    public int getNotEquals(){
+        return notEquals;
+    }
+    public void setNotEquals(int newNot){
+        notEquals = newNot;
+    }
+
 
     //read the directory, folder by folder, record by record and create hash entry/array entry for each record
     public void readDirectory(){
@@ -86,13 +95,17 @@ public class Query{
                             String recordStr = new String(record);
                             int randV = Integer.parseInt(recordStr.substring(33, 37));
                             
-                            //check for equaality or range search
+                            //check for equaality, range search, or inequality
                             if(getLower() != -1 && getUpper() == -1){                            
                                 if(randV == getLower()){
                                     selectRecords.add(String.valueOf(record));
                                 }
                             } else if (getLower() != -1 && getUpper() != -1){
                                 if(randV > getLower() && randV < getUpper()){
+                                    selectRecords.add(String.valueOf(record));
+                                }
+                            } else if (notEquals != -1){
+                                if(randV != notEquals){
                                     selectRecords.add(String.valueOf(record));
                                 }
                             }
@@ -193,11 +206,12 @@ public class Query{
     public void selectHash(String v){
         long startTime = 0;
         long endTime = 0;
+        int fileCount = 0;
         if (hasIndex == true){
             System.out.println("Records found using hash-based index: ");
             //start timer
             startTime = System.currentTimeMillis();
-            readFromDisk(index.getHash().get(v));
+            fileCount = readFromDisk(index.getHash().get(v));
             endTime = System.currentTimeMillis();
         } else {
             //set v1 for table scan equality search
@@ -209,6 +223,9 @@ public class Query{
             setLower(-1);
         }
         System.out.println("Time taken: " + (endTime - startTime) + " ms");
+        if (fileCount != 0){
+            System.out.println("Data files read from disk: " + fileCount);
+        }
 
     }
 
@@ -250,6 +267,15 @@ public class Query{
         }
         System.out.println("Time taken: " + (endTime - startTime) + " ms");
         
+    }
+
+    public void notEquals(int notValue){
+        long startTime = System.currentTimeMillis();
+        setNotEquals(notValue);
+        readDirectory();
+        setNotEquals(-1);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time taken: " + (endTime - startTime) + " ms");
     }
 
 }

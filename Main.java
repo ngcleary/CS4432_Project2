@@ -13,7 +13,7 @@ public class Main {
         
         //start input loop
         while (true) {
-        System.out.print("\n\nThe program is ready for the next command: ");
+        System.out.print("\nThe program is ready for the next command: ");
         String functionInput = scanner.nextLine().trim().toLowerCase();
         String[] functionArray = functionInput.split(" ");
 
@@ -31,6 +31,11 @@ public class Main {
                 //check if range search
                 if (functionInput.contains(" and ")){
                     query.selectArray(functionArray[7], functionArray[11]);
+                }
+                //inequality search
+                else if (functionInput.contains(" != ")){
+                    int v = Integer.parseInt(functionArray[7]);                    
+                    query.notEquals(v); //v
                 }
                 //equality search
                 else{
